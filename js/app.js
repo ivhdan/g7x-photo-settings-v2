@@ -127,20 +127,18 @@ function generateShutterSegments(value) {
 }
 
 function generateISOSegments(iso) {
+    const isoValues = ['100', '200', '400', '800', '1600'];
     const segments = getISOSegments(iso)
-        .map((className, i) => `<div class="segment ${className}"></div>`)
+        .map((className, i) => `
+            <div class="segment-wrapper">
+                <div class="segment-value">ISO ${isoValues[i]}</div>
+                <div class="segment ${className}"></div>
+            </div>`)
         .join('');
         
     return `
         <div class="segments-container">
             ${segments}
-        </div>
-        <div class="iso-labels">
-            <span>100</span>
-            <span>200</span>
-            <span>400</span>
-            <span>800</span>
-            <span>1600</span>
         </div>
     `;
 }
