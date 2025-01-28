@@ -93,9 +93,8 @@ function getApertureProgress(value) {
 }
 
 // Funzioni di generazione HTML
-function generateISOSegments(iso) {
-    const isoValues = ['100', '200', '400', '800', '1600'];
-    const segments = getISOSegments(iso)
+function generateApertureSegments(value) {
+    const segments = getApertureSegments(value)
         .map((className, i) => `<div class="segment ${className}"></div>`)
         .join('');
         
@@ -103,12 +102,12 @@ function generateISOSegments(iso) {
         <div class="segments-container">
             ${segments}
         </div>
-        <div class="iso-labels">
-            <span>100</span>
-            <span>200</span>
-            <span>400</span>
-            <span>800</span>
-            <span>1600</span>
+        <div class="aperture-labels">
+            <span>f/1.8</span>
+            <span>f/2.8</span>
+            <span>f/4</span>
+            <span>f/5.6</span>
+            <span>f/8</span>
         </div>
     `;
 }
@@ -135,19 +134,15 @@ function generateShutterSegments(value) {
 function generateISOSegments(iso) {
     const isoValues = ['100', '200', '400', '800', '1600'];
     const segments = getISOSegments(iso)
-        .map((className, i) => `
-            <div class="segment-wrapper">
-                <div class="iso-value">${isoValues[i]}</div>
-                <div class="segment ${className}"></div>
-            </div>`)
+        .map((className, i) => `<div class="segment ${className}"></div>`)
         .join('');
         
     return `
-        <div class="iso-container">
-            <div class="iso-label">ISO</div>
-            <div class="segments-container">
-                ${segments}
-            </div>
+        <div class="segments-container">
+            ${segments}
+        </div>
+        <div class="iso-labels">
+            ${isoValues.map(value => `<span>ISO ${value}</span>`).join('')}
         </div>
     `;
 }
