@@ -87,6 +87,11 @@ function getISOSegments(value) {
     });
 }
 
+function getApertureProgress(value) {
+    const number = parseFloat(value.replace('f/', '').split('-')[0]);
+    return Math.max(0, Math.min(100, (8 - number) / (8 - 1.8) * 100));
+}
+
 // Funzioni di generazione HTML
 function generateApertureSegments(value) {
     const segments = getApertureSegments(value)
@@ -131,14 +136,30 @@ function generateISOSegments(iso) {
     const segments = getISOSegments(iso)
         .map((className, i) => `
             <div class="segment-wrapper">
-                <div class="segment-value">ISO ${isoValues[i]}</div>
+                <div class="segment-value">${isoValues[i]}</div>
                 <div class="segment ${className}"></div>
             </div>`)
         .join('');
         
     return `
         <div class="segments-container">
+            <div class="segments-label">ISO</div>
             ${segments}
+        </div>
+    `;
+}
+
+function generateApertureProgress(value) {
+    return `
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>f/1.8</span>
+                <span class="value-label">${value}</span>
+                <span>f/8</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: ${getApertureProgress(value)}%"></div>
+            </div>
         </div>
     `;
 }
