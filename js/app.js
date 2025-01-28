@@ -75,14 +75,16 @@ function getShutterSegments(value) {
     });
 }
 
-function getApertureProgress(value) {
-    const number = parseFloat(value.replace('f/', '').split('-')[0]);
-    return Math.max(0, Math.min(100, (8 - number) / (8 - 1.8) * 100));
-}
-
-function getISOProgress(value) {
-    const number = parseInt(value.split('-')[0]);
-    return Math.max(0, Math.min(100, (number - 100) / (800 - 100) * 100));
+function getISOSegments(value) {
+    const isoValues = ['100', '200', '400', '800', '1600'];
+    const currentValue = value.split('-')[0]; // Prende il primo valore se è un range
+    const currentIndex = isoValues.findIndex(iso => parseInt(iso) >= parseInt(currentValue));
+    
+    return isoValues.map((_, index) => {
+        if (index === currentIndex) return 'active';
+        if (index < currentIndex) return 'past';
+        return '';
+    });
 }
 
 // Funzioni di generazione HTML
@@ -114,7 +116,7 @@ function generateShutterSegments(value) {
         <div class="segments-container">
             ${segments}
         </div>
-        <div class="aperture-labels">
+        <div class="shutter-labels">
             <span>1/1000</span>
             <span>1/500</span>
             <span>1/125</span>
@@ -124,32 +126,21 @@ function generateShutterSegments(value) {
     `;
 }
 
-function generateApertureProgress(value) {
+function generateISOSegments(iso) {
+    const segments = getISOSegments(iso)
+        .map((className, i) => `<div class="segment ${className}"></div>`)
+        .join('');
+        
     return `
-        <div class="progress-container">
-            <div class="progress-label">
-                <span>f/1.8</span>
-                <span class="value-label">${value}</span>
-                <span>f/8</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: ${getApertureProgress(value)}%"></div>
-            </div>
+        <div class="segments-container">
+            ${segments}
         </div>
-    `;
-}
-
-function generateISOProgress(iso) {
-    return `
-        <div class="progress-container">
-            <div class="progress-label">
-                <span>ISO 100</span>
-                <span class="value-label">ISO ${iso}</span>
-                <span>ISO 800</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: ${getISOProgress(iso)}%"></div>
-            </div>
+        <div class="iso-labels">
+            <span>100</span>
+            <span>200</span>
+            <span>400</span>
+            <span>800</span>
+            <span>1600</span>
         </div>
     `;
 }
@@ -171,7 +162,7 @@ function generateCardContent(item, section) {
         <p>${item.conditions}</p>
         <div class="details">
             ${visualComponent}
-            ${generateISOProgress(item.iso)}
+            ${generateISOSegments(item.iso)}
             ${section === 'shutter' 
                 ? `<span>Diaframma: ${item.aperture}</span>`
                 : `<span>Tempo: ${item.shutter}</span>`
