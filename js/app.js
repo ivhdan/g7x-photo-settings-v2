@@ -44,6 +44,7 @@ const data = {
 
 let currentLanguage = 'it';
 let currentSection = 'aperture';
+
 // Funzioni di utilità per calcoli
 function getApertureSegments(value) {
     const apertures = ['1.8', '2.8', '4', '5.6', '8'];
@@ -51,6 +52,23 @@ function getApertureSegments(value) {
     const currentIndex = apertures.findIndex(a => parseFloat(a) >= currentValue);
     
     return apertures.map((a, index) => {
+        if (index === currentIndex) return 'active';
+        if (index < currentIndex) return 'past';
+        return '';
+    });
+}
+
+function getShutterSegments(value) {
+    const shutterSpeeds = ['1/1000', '1/500', '1/125', '1/60', '1/30'];
+    // Normalizza il valore (rimuove il '+' e prende il primo numero se c'è un range)
+    const currentValue = value.replace('+', '').split('-')[0];
+    const currentIndex = shutterSpeeds.findIndex(speed => {
+        const speedValue = parseFloat(speed.replace('1/', ''));
+        const valueToCheck = parseFloat(currentValue.replace('1/', ''));
+        return valueToCheck >= speedValue;
+    });
+    
+    return shutterSpeeds.map((_, index) => {
         if (index === currentIndex) return 'active';
         if (index < currentIndex) return 'past';
         return '';
@@ -87,6 +105,25 @@ function generateApertureSegments(value) {
     `;
 }
 
+function generateShutterSegments(value) {
+    const segments = getShutterSegments(value)
+        .map((className, i) => `<div class="segment ${className}"></div>`)
+        .join('');
+        
+    return `
+        <div class="segments-container">
+            ${segments}
+        </div>
+        <div class="aperture-labels">
+            <span>1/1000</span>
+            <span>1/500</span>
+            <span>1/125</span>
+            <span>1/60</span>
+            <span>1/30</span>
+        </div>
+    `;
+}
+
 function generateApertureProgress(value) {
     return `
         <div class="progress-container">
@@ -101,6 +138,7 @@ function generateApertureProgress(value) {
         </div>
     `;
 }
+
 function generateISOProgress(iso) {
     return `
         <div class="progress-container">
@@ -123,18 +161,21 @@ function generateCardContent(item, section) {
             <p>${item.settings}</p>
         `;
     }
-
-    const apertureVisual = section === 'aperture' 
+    const visualComponent = section === 'aperture' 
         ? generateApertureSegments(item.value)
-        : generateApertureProgress(item.aperture || item.value);
-
+        : section === 'shutter' 
+            ? generateShutterSegments(item.value)
+            : generateApertureProgress(item.aperture || item.value);
     return `
         <h2>${item.value}</h2>
         <p>${item.conditions}</p>
         <div class="details">
-            ${apertureVisual}
+            ${visualComponent}
             ${generateISOProgress(item.iso)}
-            <span>${item.shutter ? 'Tempo: '+item.shutter : 'Diaframma: '+item.aperture}</span>
+            ${section === 'shutter' 
+                ? `<span>Diaframma: ${item.aperture}</span>`
+                : `<span>Tempo: ${item.shutter}</span>`
+            }
         </div>
     `;
 }
