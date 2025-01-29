@@ -1,6 +1,6 @@
-// data.js
+// data.js v- Contiene tutti i dati e le configurazioni dell'app
 
-// Configurazione e dati
+// Dati principali dell'applicazione
 const data = {
     it: {
         aperture: [
@@ -23,45 +23,63 @@ const data = {
         ]
     },
     en: {
-        // ... english data remains the same
+        aperture: [
+            { value: 'f/1.8', conditions: 'Low light, bokeh effect', iso: '100-400', shutter: '1/60-1/250' },
+            { value: 'f/2.8-4', conditions: 'General purpose, portraits', iso: '100-400', shutter: '1/125-1/500' },
+            { value: 'f/5.6', conditions: 'Landscapes, more depth', iso: '100-200', shutter: '1/60-1/250' },
+            { value: 'f/8', conditions: 'Maximum sharpness, HDR', iso: '100', shutter: '1/30-1/125' }
+        ],
+        shutter: [
+            { value: '1/1000+', conditions: 'Fast action, sports', iso: '400-800', aperture: 'f/1.8-4' },
+            { value: '1/125-1/500', conditions: 'General purpose', iso: '100-400', aperture: 'f/2.8-5.6' },
+            { value: '1/60-1/125', conditions: 'Static subjects', iso: '100-200', aperture: 'f/4-8' },
+            { value: '<1/30', conditions: 'Tripod required', iso: '100', aperture: 'f/5.6-8' }
+        ],
+        scenes: [
+            { value: 'Landscape', settings: 'f/8, ISO 100, bracket if needed' },
+            { value: 'Street', settings: 'f/5.6, ISO 400, 1/125s' },
+            { value: 'Low Light', settings: 'f/1.8, ISO 800, 1/60s' },
+            { value: 'HDR', settings: 'f/8, ISO 100, ±2 stops' }
+        ]
     }
 };
 
-// Configurazione dei segmenti con la nuova logica
+// Configurazione delle barre segmentate
 const segmentConfigs = {
     aperture: {
         values: ['1.8', '2.8', '4', '5.6', '8'],
         states: {
-            '1.8': 'warning',    // utilizzabile ma estremo
+            '1.8': 'warning',    // utilizzabile in casi estremi
             '2.8': 'warning',    // utilizzabile
             '4': 'optimal',      // valore ottimale
             '5.6': 'warning',    // utilizzabile
-            '8': 'inactive'      // da evitare
+            '8': 'inactive'      // da evitare se possibile
         }
     },
     iso: {
         values: ['100', '200', '400', '800', '1600'],
         states: {
-            '100': 'inactive',   // troppo basso
+            '100': 'inactive',   // troppo basso per uso generale
             '200': 'warning',    // utilizzabile
             '400': 'optimal',    // valore ottimale
-            '800': 'warning',    // utilizzabile ma rumoroso
+            '800': 'warning',    // utilizzabile con cautela
             '1600': 'inactive'   // da evitare
         }
     },
     shutter: {
         values: ['1/2000', '1/1000', '1/500', '1/250', '1/125', '1/60', '1/30', '1/15'],
         states: {
-            '1/2000': 'inactive',  // troppo veloce
-            '1/1000': 'warning',   // utilizzabile per sport
-            '1/500': 'warning',    // utilizzabile azione
-            '1/250': 'optimal',    // valore ottimale
-            '1/125': 'optimal',    // valore ottimale
-            '1/60': 'warning',     // utilizzabile con attenzione
+            '1/2000': 'inactive',  // raramente necessario
+            '1/1000': 'warning',   // sport/azione
+            '1/500': 'warning',    // movimento veloce
+            '1/250': 'optimal',    // uso generale
+            '1/125': 'optimal',    // uso generale
+            '1/60': 'warning',     // limite inferiore sicuro
             '1/30': 'inactive',    // rischio mosso
-            '1/15': 'inactive'     // richiede treppiede
+            '1/15': 'inactive'     // necessita supporto
         }
     }
 };
 
+// Esportiamo i dati per l'uso negli altri moduli
 export { data, segmentConfigs };
