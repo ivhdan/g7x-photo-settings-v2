@@ -78,3 +78,4 @@ const segmentConfigs = {
         }
     }
 };
+export { data, segmentConfigs };
