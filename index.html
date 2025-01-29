@@ -7,13 +7,17 @@
     <meta name="theme-color" content="#FF9800">
     <link rel="manifest" href="manifest.json">
     <style>
+        /* Variabili colori */
         :root {
-            --primary: #FF9800;
-            --background: #333333;
-            --card-bg: #424242;
-            --text: #ffffff;
+            --primary: #FF9800;    /* Arancione - colore principale */
+            --background: #333333;  /* Grigio scuro - sfondo */ 
+            --card-bg: #424242;    /* Grigio - sfondo card */
+            --text: #ffffff;        /* Bianco - testo */
+            --warning: #FFC107;     /* Giallo - valori utilizzabili */
+            --inactive: #666666;    /* Grigio - valori non consigliati */
         }
 
+        /* Reset e base */
         * {
             margin: 0;
             padding: 0;
@@ -28,6 +32,7 @@
             font-size: 40px;
         }
 
+        /* Header */
         .header {
             background: var(--primary);
             color: white;
@@ -46,12 +51,103 @@
             font-weight: bold;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .language-switch {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 36px;
         }
 
+        /* Contenuto principale */
+        .container {
+            padding: 3rem;
+            padding-bottom: 14rem;
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 3.6rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-size: 52px;
+        }
+
+        .card p {
+            margin: 2rem 0;
+            line-height: 1.4;
+            font-size: 36px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 2rem;
+            font-size: 42px;
+            color: var(--text);
+            font-weight: bold;
+        }
+
+        /* Barre segmentate */
+        .segments-container {
+            display: flex;
+            width: 100%;
+            height: 2rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            background: var(--background);
+        }
+
+        .segment {
+            flex: 1;
+            height: 100%;
+            border-right: 2px solid var(--background);
+            transition: background-color 0.3s ease;
+        }
+
+        .segment:last-child {
+            border-right: none;
+        }
+
+        .segment.optimal {
+            background: var(--primary);
+            box-shadow: 0 0 10px rgba(255,152,0,0.3);
+        }
+
+        .segment.warning {
+            background: var(--warning);
+        }
+
+        .segment.inactive {
+            background: var(--inactive);
+        }
+
+        .aperture-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 32px;
+            margin-top: 1rem;
+            color: var(--text);
+            padding: 0 0.5rem;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        /* Navigazione */
         .nav {
             position: fixed;
             bottom: 0;
@@ -83,11 +179,6 @@
             height: 5rem;
         }
 
-        .nav-btn.active svg {
-            animation: pulse 2s infinite ease-in-out;
-            color: var(--primary);
-        }
-
         .nav-btn span {
             font-size: 28px;
             text-transform: uppercase;
@@ -97,100 +188,15 @@
             color: var(--primary);
         }
 
-        .container {
-            padding: 3rem;
-            padding-bottom: 14rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 32px;
-            padding: 3.6rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 12px rgba(0,0,0,0.1);
-        }
-
-        .card h2 {
+        .nav-btn.active svg {
+            animation: pulse 2s infinite ease-in-out;
             color: var(--primary);
-            margin-bottom: 2rem;
-            font-size: 52px;
         }
 
-        .card p {
-            margin: 2rem 0;
-            line-height: 1.4;
-            font-size: 36px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .details {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            margin-top: 2rem;
-            font-size: 42px;
-            color: var(--text);
-            font-weight: bold;
-        }
-
-        .value-label {
-            font-size: 36px;
-            opacity: 0.8;
-        }
-
-        .language-switch {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            padding: 2rem 3rem;
-            border-radius: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 36px;
-        }
-
-        /* Stili per la barra segmentata */
-        .segments-container {
-            display: flex;
-            width: 100%;
-            height: 2rem;
-            border-radius: 1rem;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
-        }
-
-        .segment {
-            flex: 1;
-            height: 100%;
-            background: #4A4A4A;
-            border-right: 2px solid var(--background);
-            transition: background-color 0.3s ease;
-        }
-
-        .segment:last-child {
-            border-right: none;
-        }
-
-        .segment.optimal {
-            background: var(--primary);
-        }
-
-        .segment.warning {
-            background: #FFC107;
-        }
-
-        .segment.inactive {
-            background: #4A4A4A;
-        }
-
-        .aperture-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 32px;
-            margin-top: 0.5rem;
-            color: var(--text);
-            padding: 0 0.5rem;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -205,6 +211,7 @@
     </div>
 
     <nav class="nav">
+        <!-- Apertura -->
         <button class="nav-btn active" data-section="aperture">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="8"/>
@@ -216,6 +223,8 @@
             </svg>
             <span>Apertura</span>
         </button>
+        
+        <!-- Tempo -->
         <button class="nav-btn" data-section="shutter">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/>
@@ -224,6 +233,8 @@
             </svg>
             <span>Tempo</span>
         </button>
+        
+        <!-- Scene -->
         <button class="nav-btn" data-section="scenes">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="2" y="6" width="20" height="12" rx="2"/>
