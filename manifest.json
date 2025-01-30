@@ -1,0 +1,21 @@
+{
+    "name": "G7X Photo Settings",
+    "short_name": "G7X Settings",
+    "description": "Settings guide for Canon G7X camera",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#333333",
+    "theme_color": "#FF9800",
+    "icons": [
+        {
+            "src": "icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
