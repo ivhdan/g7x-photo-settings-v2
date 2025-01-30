@@ -67,10 +67,10 @@ const segmentConfigs = {
         }
     },
     shutter: {
-        values: ['1/2000', '1/1000', '1/500', '1/250', '1/125', '1/60', '1/30', '1/15'],
+        values: ['1/2k', '1/1k', '1/500', '1/250', '1/125', '1/60', '1/30', '1/15'],
         states: {
-            '1/2000': 'inactive',  // raramente necessario
-            '1/1000': 'warning',   // sport/azione
+            '1/2k': 'inactive',  // raramente necessario
+            '1/1k': 'warning',   // sport/azione
             '1/500': 'warning',    // movimento veloce
             '1/250': 'optimal',    // uso generale
             '1/125': 'optimal',    // uso generale
