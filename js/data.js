@@ -1,4 +1,6 @@
-// Configurazione e dati
+// data.js - Contiene tutti i dati e le configurazioni dell'app
+
+// Dati principali dell'applicazione
 const data = {
     it: {
         aperture: [
@@ -42,40 +44,42 @@ const data = {
     }
 };
 
-// Configurazione dei segmenti
+// Configurazione delle barre segmentate
 const segmentConfigs = {
-    shutter: {
-        values: ['1/2000', '1/1000', '1/500', '1/250', '1/125', '1/60', '1/30', '1/15'],
-        states: {
-            '1/2000': 'inactive',
-            '1/1000': 'warning',
-            '1/500': 'warning',
-            '1/250': 'optimal',
-            '1/125': 'optimal',
-            '1/60': 'warning',
-            '1/30': 'warning',
-            '1/15': 'inactive'
-        }
-    },
     aperture: {
         values: ['1.8', '2.8', '4', '5.6', '8'],
         states: {
-            '1.8': 'warning',
-            '2.8': 'warning',
-            '4': 'optimal',
-            '5.6': 'warning',
-            '8': 'warning'
+            '1.8': 'warning',    // utilizzabile in casi estremi
+            '2.8': 'warning',    // utilizzabile
+            '4': 'optimal',      // valore ottimale
+            '5.6': 'warning',    // utilizzabile
+            '8': 'inactive'      // da evitare se possibile
         }
     },
     iso: {
         values: ['100', '200', '400', '800', '1600'],
         states: {
-            '100': 'warning',
-            '200': 'optimal',
-            '400': 'optimal',
-            '800': 'warning',
-            '1600': 'inactive'
+            '100': 'inactive',   // troppo basso per uso generale
+            '200': 'warning',    // utilizzabile
+            '400': 'optimal',    // valore ottimale
+            '800': 'warning',    // utilizzabile con cautela
+            '1600': 'inactive'   // da evitare
+        }
+    },
+    shutter: {
+        values: ['1/2000', '1/1000', '1/500', '1/250', '1/125', '1/60', '1/30', '1/15'],
+        states: {
+            '1/2000': 'inactive',  // raramente necessario
+            '1/1000': 'warning',   // sport/azione
+            '1/500': 'warning',    // movimento veloce
+            '1/250': 'optimal',    // uso generale
+            '1/125': 'optimal',    // uso generale
+            '1/60': 'warning',     // limite inferiore sicuro
+            '1/30': 'inactive',    // rischio mosso
+            '1/15': 'inactive'     // necessita supporto
         }
     }
 };
+
+// Esportiamo i dati per l'uso negli altri moduli
 export { data, segmentConfigs };
