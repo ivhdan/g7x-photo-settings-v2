@@ -1,4 +1,4 @@
-// generators.js
+// generators.js - Gestisce la generazione dell'HTML per l'interfaccia
 import { segmentConfigs } from './data.js';
 
 // Stili CSS per i segmenti
@@ -16,28 +16,63 @@ const styles = `
             background: #666666;
             opacity: 0.8;
         }
+        .labels-top, .labels-bottom {
+            display: flex;
+            justify-content: space-between;
+            font-size: 32px;
+            padding: 0.5rem 0;
+        }
+        .labels-top span, .labels-bottom span {
+            flex: 2;
+            text-align: center;
+        }
     </style>
 `;
 
 // Aggiunge gli stili al documento
 document.head.insertAdjacentHTML('beforeend', styles);
 
-// Funzione per generare la barra segmentata
-function generateSegmentedBar(type, currentValue) {
-    const config = segmentConfigs[type];
+function generateShutterBar(value) {
+    const config = segmentConfigs.shutter;
     
-    // Genera i segmenti della barra
     const segments = config.values.map(value => {
         const state = config.states[value];
         return `<div class="segment ${state}"></div>`;
     }).join('');
 
-    // Genera le etichette alternate sopra e sotto
-    const labels = config.values.map((value, index) => {
+    const topLabels = config.values.filter((_, i) => i % 2 === 0)
+        .map(value => `<span>${value}</span>`).join('');
+    const bottomLabels = config.values.filter((_, i) => i % 2 === 1)
+        .map(value => `<span>${value}</span>`).join('');
+
+    return `
+        <div class="labels-top">${topLabels}</div>
+        <div class="segments-container">${segments}</div>
+        <div class="labels-bottom">${bottomLabels}</div>
+    `;
+}
+
+function generateApertureBar(value) {
+    return generateSegmentedBar('aperture', value);
+}
+
+function generateISOBar(value) {
+    return generateSegmentedBar('iso', value);
+}
+
+function generateSegmentedBar(type, currentValue) {
+    if (type === 'shutter') return generateShutterBar(currentValue);
+
+    const config = segmentConfigs[type];
+    
+    const segments = config.values.map(value => {
+        const state = config.states[value];
+        return `<div class="segment ${state}"></div>`;
+    }).join('');
+
+    const labels = config.values.map(value => {
         const prefix = type === 'aperture' ? 'f/' : '';
-        const position = index % 2 === 0 ? 'top' : 'bottom';
-        const left = (index / (config.values.length - 1)) * 100;
-        return `<span class="label-${position}" style="left: ${left}%">${prefix}${value}</span>`;
+        return `<span>${prefix}${value}</span>`;
     }).join('');
 
     return `
@@ -50,20 +85,6 @@ function generateSegmentedBar(type, currentValue) {
     `;
 }
 
-// Funzioni specifiche per ogni tipo di barra
-function generateApertureBar(value) {
-    return generateSegmentedBar('aperture', value);
-}
-
-function generateShutterBar(value) {
-    return generateSegmentedBar('shutter', value);
-}
-
-function generateISOBar(value) {
-    return generateSegmentedBar('iso', value);
-}
-
-// Funzione per generare il contenuto di una card
 function generateCardContent(item, section) {
     if (!item.iso) {
         return `
