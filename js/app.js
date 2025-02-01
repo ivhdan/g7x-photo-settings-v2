@@ -1,5 +1,4 @@
 // app.js - File principale dell'applicazione
-
 import { data } from './data.js';
 import { generateCardContent } from './generators.js';
 
@@ -9,10 +8,7 @@ let currentSection = 'aperture';
 
 // Funzione per mostrare una sezione
 function showSection(section) {
-    // Aggiorna la sezione corrente
     currentSection = section;
-    
-    // Ottiene il contenitore e lo pulisce
     const content = document.getElementById('content');
     content.innerHTML = '';
 
@@ -53,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Caricamento iniziale
     showSection('aperture');
 
-    // Service Worker Registration per PWA
+    // Service Worker Registration
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
             .then(registration => {
