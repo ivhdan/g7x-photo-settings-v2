@@ -5,18 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>G7X Photo Settings</title>
     <meta name="theme-color" content="#FF9800">
+
     <style>
-        /* Variabili colori */
         :root {
-            --primary: #FF9800;    /* Arancione - colore principale */
-            --background: #333333;  /* Grigio scuro - sfondo */ 
-            --card-bg: #424242;    /* Grigio - sfondo card */
-            --text: #ffffff;        /* Bianco - testo */
-            --warning: #FFC107;     /* Giallo - valori utilizzabili */
-            --inactive: #666666;    /* Grigio - valori non consigliati */
+            --primary: #FF9800;
+            --background: #333333;
+            --card-bg: #424242;
+            --text: #ffffff;
         }
 
-        /* Reset e base */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +28,6 @@
             font-size: 40px;
         }
 
-        /* Header */
         .header {
             background: var(--primary);
             color: white;
@@ -50,23 +46,62 @@
             font-weight: bold;
         }
 
-        .language-switch {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            padding: 2rem 3rem;
-            border-radius: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 36px;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
-        /* Contenuto principale */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 2rem;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn {
+            border: none;
+            background: none;
+            color: var(--text);
+            width: 10rem;
+            height: 10rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .nav-btn svg {
+            width: 5rem;
+            height: 5rem;
+        }
+
+        .nav-btn.active svg {
+            animation: pulse 2s infinite ease-in-out;
+            color: var(--primary);
+        }
+
+        .nav-btn span {
+            font-size: 28px;
+            text-transform: uppercase;
+        }
+
+        .nav-btn.active {
+            color: var(--primary);
+        }
+
         .container {
             padding: 3rem;
             padding-bottom: 14rem;
         }
 
-        /* Card */
         .card {
             background: var(--card-bg);
             border-radius: 32px;
@@ -100,100 +135,80 @@
             font-weight: bold;
         }
 
-        /* Barre segmentate */
-        .segments-container {
-    display: flex;
-    width: 100%;
-    height: 2rem;
-    border-radius: 1rem;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.segment {
-    flex: 1;
-    height: 100%;
-    background: #4A4A4A;
-    border-right: 2px solid var(--background);
-    transition: background-color 0.3s ease;
-}
-
-.segment:last-child {
-    border-right: none;
-}
-
-.segment.optimal {
-    background: var(--primary);
-}
-
-.segment.warning {
-    background: #FFC107;
-}
-
-.segment.inactive {
-    background: #666666;
-}
-
-.aperture-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 32px;
-    margin-top: 0.5rem;
-    color: var(--text);
-    padding: 0 0.5rem;
-}
-
-        /* Navigazione */
-        .nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 2rem;
-            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+        .value-label {
+            font-size: 36px;
+            opacity: 0.8;
         }
 
-        .nav-btn {
+        .language-switch {
+            background: rgba(255,255,255,0.2);
             border: none;
-            background: none;
-            color: var(--text);
-            width: 10rem;
-            height: 10rem;
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 36px;
+        }
+
+        /* Stili per la barra segmentata */
+        .segments-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            transition: all 0.3s;
+            width: 100%;
+            height: 2rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin: 2rem 0;  /* Spazio sopra e sotto la barra */
+            background: var(--background);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .nav-btn svg {
-            width: 5rem;
-            height: 5rem;
+        .segment {
+            flex: 1;
+            height: 100%;
+            border-right: 1px solid rgba(0,0,0,0.2);
+            transition: all 0.3s ease-in-out;
         }
 
-        .nav-btn span {
-            font-size: 28px;
-            text-transform: uppercase;
+        .segment:last-child {
+            border-right: none;
         }
 
-        .nav-btn.active {
-            color: var(--primary);
+        .segment.optimal {
+            background: var(--primary);
+            box-shadow: 0 0 15px rgba(255,152,0,0.3);
         }
 
-        .nav-btn.active svg {
-            animation: pulse 2s infinite ease-in-out;
-            color: var(--primary);
+        .segment.warning {
+            background: #FFC107;
+            box-shadow: 0 0 10px rgba(255,193,7,0.2);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .segment.inactive {
+            background: #666666;
+            opacity: 0.8;
         }
+
+        /* Nuovo stile per le etichette alternate */
+        .aperture-labels {
+            position: relative;
+            height: 80px;
+            margin: 0;
+            font-size: 32px;
+            color: var(--text);
+        }
+
+        .label-top {
+            position: absolute;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .label-bottom {
+            position: absolute;
+            bottom: 0;
+            transform: translateX(-50%);
+        }
+
     </style>
 </head>
 <body>
@@ -207,7 +222,6 @@
     </div>
 
     <nav class="nav">
-        <!-- Apertura -->
         <button class="nav-btn active" data-section="aperture">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="8"/>
@@ -219,8 +233,6 @@
             </svg>
             <span>Apertura</span>
         </button>
-        
-        <!-- Tempo -->
         <button class="nav-btn" data-section="shutter">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/>
@@ -229,8 +241,6 @@
             </svg>
             <span>Tempo</span>
         </button>
-        
-        <!-- Scene -->
         <button class="nav-btn" data-section="scenes">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="2" y="6" width="20" height="12" rx="2"/>
