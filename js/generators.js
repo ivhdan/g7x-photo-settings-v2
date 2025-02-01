@@ -1,19 +1,20 @@
-// generators.js - Gestisce la generazione dell'HTML per l'interfaccia
-
+// generators.js
 import { segmentConfigs } from './data.js';
 
-// Stili CSS per i segmenti - verranno inseriti dinamicamente
+// Stili CSS per i segmenti
 const styles = `
     <style>
         .segment.optimal { 
             background: var(--primary);
-            box-shadow: 0 0 10px rgba(255,152,0,0.3);
+            box-shadow: 0 0 15px rgba(255,152,0,0.3);
         }
         .segment.warning { 
-            background: var(--warning);
+            background: #FFC107;
+            box-shadow: 0 0 10px rgba(255,193,7,0.2);
         }
         .segment.inactive { 
-            background: var(--inactive);
+            background: #666666;
+            opacity: 0.8;
         }
     </style>
 `;
@@ -31,10 +32,12 @@ function generateSegmentedBar(type, currentValue) {
         return `<div class="segment ${state}"></div>`;
     }).join('');
 
-    // Genera le etichette sotto la barra
-    const labels = config.values.map(value => {
+    // Genera le etichette alternate sopra e sotto
+    const labels = config.values.map((value, index) => {
         const prefix = type === 'aperture' ? 'f/' : '';
-        return `<span>${prefix}${value}</span>`;
+        const position = index % 2 === 0 ? 'top' : 'bottom';
+        const left = (index / (config.values.length - 1)) * 100;
+        return `<span class="label-${position}" style="left: ${left}%">${prefix}${value}</span>`;
     }).join('');
 
     return `
@@ -62,7 +65,6 @@ function generateISOBar(value) {
 
 // Funzione per generare il contenuto di una card
 function generateCardContent(item, section) {
-    // Per le scene, che non hanno ISO
     if (!item.iso) {
         return `
             <h2>${item.value}</h2>
@@ -70,7 +72,6 @@ function generateCardContent(item, section) {
         `;
     }
 
-    // Per apertura e tempi
     return `
         <h2>${item.value}</h2>
         <p>${item.conditions}</p>
@@ -89,5 +90,4 @@ function generateCardContent(item, section) {
     `;
 }
 
-// Esporta solo la funzione necessaria all'app
 export { generateCardContent };
